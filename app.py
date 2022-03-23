@@ -64,7 +64,12 @@ def app():
         choice = menu()
         if choice == '1':
             # add book
-            pass
+            title = input('Title: ')
+            author = input('Author: ')
+            date = input('Published Date (ex. Janurary 21, 2001): ')
+            date = clean_date(date)
+            price = input('Price (ex. 25.99): ')
+
         
         elif choice == '2':
             # view all books
@@ -89,3 +94,5 @@ if __name__ == '__main__':
     
     for book in session.query(Book):
         print(book)
+    
+    
