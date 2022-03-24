@@ -13,8 +13,8 @@ def menu():
               \r3) Search for book
               \r4) Book Analysis
               \r5) Exit
-              \n''')
-        choice = input('\rWhat would you like to do? ')
+              \r''')
+        choice = input('What would you like to do? ')
         if choice in ['1', '2', '3', '4', '5']:
             return choice
         
@@ -42,10 +42,9 @@ def clean_date(date_str):
         return_date = datetime.date(year, month, day)
     except ValueError:
         input(''' 
-        \n*** Date Error ***
-        \nThe date should be formatted exactly like January 21, 2001
-        \nPress ENTER to try again
-        \n''')
+        \r*** Date Error ***
+        \rThe date should be formatted exactly like January 21, 2001
+        \rPress ENTER to try again\n''')
         return
     else:
         return return_date
@@ -56,11 +55,13 @@ def clean_price(price_str):
         price_float = float(price_str)
     except ValueError:
         input(''' 
-        \n*** Price Error ***
-        \nThe price should be formatted exactly like 25.67,
-        \nwithout the currency symbol
-        \nPlease try again: ''')
-    return int(price_float * 100)
+        \r*** Price Error ***
+        \rThe price should be formatted exactly like 25.67,
+        \rwithout the currency symbol
+        \rPress ENTER to try again ''')
+        return
+    else:
+        return int(price_float * 100)
     
 
 def add_csv():
@@ -100,12 +101,15 @@ def app():
             new_book = Book(title=title, author=author, published_date=date, price=cleaned_price)
             session.add(new_book)
             session.commit()
-            print(f'{title} by {author} added!')
+            print(f'\n{title} by {author} added!')
             time.sleep(2)
         
         elif choice == '2':
             # view all books
-            pass
+            print('\n')
+            for book in session.query(Book):
+                print(f'{book.id} | {book.title} | {book.author}')
+            input('\nPress ENTER to continue ')
         
         elif choice == '3':
             # search book
@@ -116,7 +120,8 @@ def app():
             pass
         
         else:
-            print('Goodbye')
+            print('\nGoodbye\n')
+            time.sleep(1.5)
             app_running = False
 
 
@@ -125,7 +130,7 @@ if __name__ == '__main__':
     add_csv()
     app()
 
-    for book in session.query(Book):
-        print(book)
+    # for book in session.query(Book):
+    #     print(book)
     
     
