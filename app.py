@@ -209,7 +209,7 @@ def app():
             total_books = session.query(Book).count()
             python_books = session.query(Book).filter(Book.title.like('%Python%')).count()
             print(f'''
-            \n**** Book Analusis ****
+            \n**** Book Analysis ****
             \rOldest Book: {oldest_book}
             \rNewest Book: {newest_book}
             \rTotal Books: {total_books}
