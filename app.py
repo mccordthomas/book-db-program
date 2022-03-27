@@ -21,15 +21,26 @@ def menu():
         else:
             input('''
                   \rPlease choose 1-5.
+                  \rPress ENTER to try again
                     ''')
 
-# main menu - add, search, analysis, exit, view
-# add books to db
-# edit books
-# delete books
-# search books
-# data cleaning
-# loop runs program
+def sub_menu():
+    while True:   
+        print('''
+            \r1) Edit
+            \r2) Delete
+            \r3) Return to main menu\r
+            ''')
+        choice = input('What would you like to do? ')
+        if choice in ['1', '2', '3']:
+            return choice
+        
+        else:
+            input('''
+                  \rPlease choose 1-3.
+                  \rPress ENTER to try again
+                    ''')
+            
             
 def clean_date(date_str):
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
@@ -82,6 +93,30 @@ def clean_id(id_str, options):
                 \rOptions: {options}
                 \rPress ENTER to try again ''')
             return
+
+
+def edit_check(column_name, current_value):
+    print(f'\n     Edit {column_name}')
+    if column_name == 'Price':
+        print(f'Current Value: ${current_value/100}')
+    elif column_name == 'Date':
+        print(f'Current Value: {current_value.strftime("%B %d, %Y")}')
+    else:
+        print(f'Current Value: {current_value}')
+    
+    if column_name == 'Date' or column_name == 'Price':
+        while True:
+            changes = input('What would you like to change the value to? ')
+            if column_name == 'Date':
+                cleaned_change = clean_date(changes)
+                if type(cleaned_change) == datetime.date:
+                    return cleaned_change
+            elif column_name == 'Price':
+                cleaned_change = clean_price(changes)
+                if type(cleaned_change) == int:
+                    return cleaned_change
+    else:
+        return input('What would you like to change the value to? ')
 
 
 def add_csv():
@@ -149,8 +184,24 @@ def app():
                 \r{the_book.title} by {the_book.author}
                 \rPublished: {the_book.published_date}
                 \rPrice: ${the_book.price / 100}''')
-            input('\nPress ENTER to continue ')
-        
+            sub_choice = sub_menu()
+            if sub_choice == '1':
+                # edit
+                the_book.title = edit_check('Title', the_book.title)
+                the_book.author = edit_check('Author', the_book.author)
+                the_book.published_date = edit_check('Date', the_book.published_date)
+                the_book.price = edit_check('Price', the_book.price)
+                session.commit()
+                print('Book Updated!')
+                time.sleep(1.5)
+
+            elif sub_choice == '2':
+                # delete
+                session.delete(the_book)
+                session.commit()
+                print('Book Deleted!')
+                time.sleep(1.5)
+
         elif choice == '4':
             # book analysis            
             pass
